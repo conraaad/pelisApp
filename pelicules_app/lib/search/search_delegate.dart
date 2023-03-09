@@ -47,6 +47,10 @@ class MovieSearchDelegate extends SearchDelegate {
     return lastSearch;
   }
 
+  //Una manera de fer-ho, sense streams, directament amb un future Builder, problema => estem disparant moltes peticions, amb cada canvi
+  //hem de fer un filtratge dels canvis que volem fer 
+
+  /*
   @override
   Widget buildSuggestions(BuildContext context) {
     if (query.isEmpty) return _emptyContainer();
@@ -55,6 +59,37 @@ class MovieSearchDelegate extends SearchDelegate {
     
     return FutureBuilder(
       future: moviesProvider.searchMovies(query),
+      builder: (BuildContext context, AsyncSnapshot<List<Movie>> snapshot) {
+        if (!snapshot.hasData) return _emptyContainer();
+
+        final movieList = snapshot.data!;
+
+        lastSearch = ListView.separated(
+          itemCount: movieList.length,
+          itemBuilder: (context, index) {
+            movieList[index].heroId = 'search-id: ${movieList[index].id}';
+            return _MovieItem(movieList[index]);
+          },
+          separatorBuilder: (_, __) => const Divider(),
+        );
+
+        return lastSearch;
+      },
+    );
+  }*/
+
+  //Amb streams
+
+    @override
+  Widget buildSuggestions(BuildContext context) {
+    if (query.isEmpty) return _emptyContainer();
+
+    //el buildSuggestion s'executa cada vegada que es fa una modificacio en el searchtab, pero el streamBuilder nomes fa el build quan el stream emet algun valor
+    final moviesProvider = Provider.of<MoviesProvider>(context, listen: false);
+    moviesProvider.getSuggestionByQuery(query);
+
+    return StreamBuilder(
+      stream: moviesProvider.suggestionStream,
       builder: (BuildContext context, AsyncSnapshot<List<Movie>> snapshot) {
         if (!snapshot.hasData) return _emptyContainer();
 

@@ -1,8 +1,11 @@
 //Provider de les pelicules, aqui farem els request http
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
+import 'package:pelicules_app/helpers/debouncer.dart';
 import 'package:pelicules_app/models/models.dart';
 
 //Aquest sera el nostre provider, pq sigui un provider ha de heredar de ChangeNotifier que serveix per compartir info
@@ -28,6 +31,11 @@ class MoviesProvider extends ChangeNotifier{
 
   //Cast Detail pero identificats pel seu id
   Map<int, CastDetail> actorsById = {};
+
+  final debouncer = Debouncer(duration: const Duration(milliseconds: 500));
+
+  final StreamController<List<Movie>> _suggestionStreamController = StreamController.broadcast();
+  Stream<List<Movie>> get suggestionStream => _suggestionStreamController.stream;
 
   MoviesProvider(){
     getGenres();
@@ -170,6 +178,22 @@ class MoviesProvider extends ChangeNotifier{
     }
     actorsById[actorDetail.id] = actorDetail;
     return actorDetail;
+  }
+
+  //Per controlar que no es disparin moltes peticions, estem fent un filtratge amb un stream
+  void getSuggestionByQuery(String query) {
+    debouncer.value = '';
+    debouncer.onValue = (value) async {
+      final results = await searchMovies(query);
+      _suggestionStreamController.add(results);
+    };
+
+    final timer = Timer.periodic(const Duration(milliseconds: 300), ( _ ) {
+        debouncer.value = query;
+      }
+    );
+
+    Future.delayed(const Duration(milliseconds: 301)).then(( _ ) => timer.cancel());
   }
 
 }
