@@ -6,9 +6,6 @@ import 'package:pelicules_app/models/models.dart';
 import 'package:pelicules_app/providers/movies_provider.dart';
 import 'package:pelicules_app/themes/app_theme.dart';
 
-//TODO: Coses a acabar = {
-//  Pantalla cast detail, Bloquejar entrada a pagina cast detail a aquells que no tinguem res
-//}
 
 class CastDetailScreen extends StatelessWidget {
    

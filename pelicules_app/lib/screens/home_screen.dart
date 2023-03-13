@@ -50,7 +50,12 @@ class HomeScreen extends StatelessWidget {
             const SizedBox(height: 50,),
           ],
         ),
-      )
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => Navigator.pushNamed(context, 'watchList'),
+        child: const Icon(Icons.movie_filter),
+      ),
+      //Aqui la idea es mirar de implementar una Bottom navigation bar
     );
   }
 }
