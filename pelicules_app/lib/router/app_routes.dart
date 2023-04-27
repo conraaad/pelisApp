@@ -6,7 +6,7 @@ import 'package:pelicules_app/screens/screens.dart';
 //classe que ens serveix per tenir les rutes molt més netes, modularitat del codi
 
 abstract class AppRoutes {
-  static const initialRoute = 'home';
+  static const initialRoute = 'prova';
 
   //El tema rutes es pot fer perfectament aixi
   
@@ -15,6 +15,7 @@ abstract class AppRoutes {
     'detail': (BuildContext context) => const DetailScreen(),
     'castDetail': (BuildContext context) => const CastDetailScreen(),
     'watchList' : (BuildContext context) => const WatchListScreen(),
+    'prova' : (BuildContext context) => const ProvaNavBar(),
   };
 
   //Pero el que farem sera crear una funcio que crei el mapa de forma dinamica en funcio de la 

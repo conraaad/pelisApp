@@ -76,82 +76,83 @@ class _WatchListScreenState extends State<WatchListScreen> {
         title: const Text('Localstorage demo'),
       ),
       body: Container(
-          padding: const EdgeInsets.all(10.0),
-          constraints: const BoxConstraints.expand(),
-          child: FutureBuilder(
-            future: storage.ready,
-            builder: (BuildContext context, AsyncSnapshot snapshot) {
-              if (snapshot.data == null) {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
-
-              if (!initialized) {
-                var items = storage.getItem('todos');
-
-                if (items != null) {
-                  list.items = List<TodoItem>.from(
-                    (items as List).map(
-                      (item) => TodoItem(
-                        title: item['title'],
-                        done: item['done'],
-                      ),
-                    ),
-                  );
-                }
-
-                initialized = true;
-              }
-
-              List<Widget> widgets = list.items.map((item) {
-                return CheckboxListTile(
-                  value: item.done,
-                  title: Text(item.title),
-                  selected: item.done,
-                  onChanged: (_) {
-                    _toggleItem(item);
-                  },
-                );
-              }).toList();
-
-              return Column(
-                children: <Widget>[
-                  Expanded(
-                    flex: 1,
-                    child: ListView(
-                      itemExtent: 50.0,
-                      children: widgets,
-                    ),
-                  ),
-                  ListTile(
-                    title: TextField(
-                      controller: controller,
-                      decoration: const InputDecoration(
-                        labelText: 'What to do?',
-                      ),
-                      onEditingComplete: _save,
-                    ),
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        IconButton(
-                          icon: const Icon(Icons.save),
-                          onPressed: _save,
-                          tooltip: 'Save',
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.delete),
-                          onPressed: _clearStorage,
-                          tooltip: 'Clear storage',
-                        )
-                      ],
-                    ),
-                  ),
-                ],
+        padding: const EdgeInsets.all(10.0),
+        constraints: const BoxConstraints.expand(),
+        child: FutureBuilder(
+          future: storage.ready,
+          builder: (BuildContext context, AsyncSnapshot snapshot) {
+            if (!snapshot.hasData) {
+              return const Center(
+                child: CircularProgressIndicator(),
               );
-            },
-          )),
+            }
+
+            if (!initialized) {
+              var items = storage.getItem('todos');
+
+              if (items != null) {
+                list.items = List<TodoItem>.from(
+                  (items as List).map(
+                    (item) => TodoItem(
+                      title: item['title'],
+                      done: item['done'],
+                    ),
+                  ),
+                );
+              }
+
+              initialized = true;
+            }
+
+            List<Widget> widgets = list.items.map((item) {
+              return CheckboxListTile(
+                value: item.done,
+                title: Text(item.title),
+                selected: item.done,
+                onChanged: (_) {
+                  _toggleItem(item);
+                },
+              );
+            }).toList();
+
+            return Column(
+              children: <Widget>[
+                Expanded(
+                  flex: 1,
+                  child: ListView(
+                    itemExtent: 50.0,
+                    children: widgets,
+                  ),
+                ),
+                ListTile(
+                  title: TextField(
+                    controller: controller,
+                    decoration: const InputDecoration(
+                      labelText: 'What to do?',
+                    ),
+                    onEditingComplete: _save,
+                  ),
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      IconButton(
+                        icon: const Icon(Icons.save),
+                        onPressed: _save,
+                        tooltip: 'Save',
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.delete),
+                        onPressed: _clearStorage,
+                        tooltip: 'Clear storage',
+                      )
+                    ],
+                  ),
+                ),
+              ],
+            );
+          },
+        )
+      )
     );
   }
 
