@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 import 'package:localstorage/localstorage.dart';
 
-import 'package:pelicules_app/helpers/helpers.dart';
 import 'package:pelicules_app/models/models.dart';
 
 class SavedMoviesProvider extends ChangeNotifier {
@@ -63,22 +62,11 @@ class SavedMoviesProvider extends ChangeNotifier {
   void _loadFromStorage() async {
     await _storage.ready;
     final List<dynamic>? savedData = _storage.getItem('saved_movies');
-    print(savedData == null ? "SavedData: null" : "SavedData: not null");
-    print("Saved Data al LOAD: $savedData");
     if (savedData != null) {
       empty = false;
       savedMoviesList = savedData.map((data) => Movie.fromJson(data)).toList();
       notifyListeners();
     }
-  }
-
-  //PRE: cert
-  //POST: retorna un Pair<bool, Movie> => true si la pelicula amb ID: id esta a la llista de guardades
-  Pair<bool, Movie?> getMovieSavedById(int id) {
-    for (int i = 0; i < savedMoviesList.length; i++) {
-      if (savedMoviesList[i].id == id) return Pair(true, savedMoviesList[i]);
-    }
-    return Pair(false, null);
   }
 
   List<dynamic> _getFullJson() {

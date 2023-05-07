@@ -37,7 +37,7 @@ class HomeScreen extends StatelessWidget {
               colors: [AppTheme.mainColor, Colors.white],
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
-              stops: [0.3, 0.6]
+              stops: [0.2, 0.6]
             )
           ),
           child: Column(

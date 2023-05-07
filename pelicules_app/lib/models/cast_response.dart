@@ -21,4 +21,10 @@ class CastResponse {
     cast: List<Cast>.from(json["cast"].map((x) => Cast.fromJson(x))),
     crew: List<Cast>.from(json["crew"].map((x) => Cast.fromJson(x))),
   );
+
+  void filterCastList() {
+    for (int i = cast.length - 1; i >= 0; i--) {
+      if (cast[i].profilePath == null) cast.removeAt(i);
+    }
+  }
 }

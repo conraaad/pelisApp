@@ -138,7 +138,7 @@ class _PosterAndTitle extends StatelessWidget {
                 Text(cast.knownForDepartment, style: const TextStyle(fontSize: 18), overflow: TextOverflow.ellipsis, maxLines: 2,),
                 const SizedBox(height: 10),
                 //BirthDay and BirthPlace
-                Text('${cast.birthdayText}, ${cast.placeOfBirth ?? 'No place known'}', style: const TextStyle(fontSize: 18), overflow: TextOverflow.ellipsis, maxLines: 2,),
+                Text("${cast.birthdayText}, ${cast.getPlaceOfBirth}", style: const TextStyle(fontSize: 18), overflow: TextOverflow.ellipsis, maxLines: 2,),
                 const SizedBox(height: 10),
                 //Deathday or actual age
                 Text(cast.ageText, style: const TextStyle(fontSize: 18), overflow: TextOverflow.ellipsis, maxLines: 2,),

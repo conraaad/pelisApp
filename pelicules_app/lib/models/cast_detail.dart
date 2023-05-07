@@ -6,16 +6,16 @@ import 'package:pelicules_app/models/models.dart';
 class CastDetail {
   List<String> alsoKnownAs;
   String biography;
-  String birthday;
+  String? birthday;
   String? deathday;
-  int gender;
+  int? gender;
   String? homepage;
   int id;
-  String imdbId;
+  String? imdbId;
   String knownForDepartment;
   String name;
   String? placeOfBirth;
-  double popularity;
+  double? popularity;
   String? profilePath;
 
   //pelicules en les que el cast ha participat
@@ -24,16 +24,16 @@ class CastDetail {
   CastDetail({
     required this.alsoKnownAs,
     required this.biography,
-    required this.birthday,
+    this.birthday,
     this.deathday,
-    required this.gender,
+    this.gender,
     this.homepage,
     required this.id,
-    required this.imdbId,
+    this.imdbId,
     required this.knownForDepartment,
     required this.name,
     this.placeOfBirth,
-    required this.popularity,
+    this.popularity,
     this.profilePath,
   });
 
@@ -43,12 +43,19 @@ class CastDetail {
   }
 
   get birthdayText {
-    return _getDatePhrase(birthday);
+    return birthday != null ? _getDatePhrase(birthday!) : "No birthday known";
+    
   }
 
   get ageText {
-    if (deathday != null) return _getActualAge(birthday, true, deathday!);
-    return _getActualAge(birthday, false);
+    if (birthday != null) {
+      return deathday != null ? _getActualAge(birthday!, true, deathday!) : _getActualAge(birthday!, false);
+    }    
+    return "No birthday known";
+  }
+
+  get getPlaceOfBirth {
+    return placeOfBirth ?? "No place known";
   }
 
   //PRE: String Data format => aaaa-mm-dd

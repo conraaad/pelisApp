@@ -101,7 +101,7 @@ class _MoviePoster extends StatelessWidget {
           const SizedBox(height: 10),
 
           //Textoverflow ellipsis es pq surtin els tipics tres puntets de hi ha mes text
-          Text(movie.title ?? 'No original title', overflow: TextOverflow.ellipsis, textAlign: TextAlign.center, maxLines: 2)
+          Text(movie.getTitle, overflow: TextOverflow.ellipsis, textAlign: TextAlign.center, maxLines: 2, style: const TextStyle(fontWeight: FontWeight.bold))
         ],
       ),
     );

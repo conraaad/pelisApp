@@ -11,7 +11,6 @@ import 'package:pelicules_app/models/models.dart';
 //Aquest sera el nostre provider, pq sigui un provider ha de heredar de ChangeNotifier que serveix per compartir info
 
 class MoviesProvider extends ChangeNotifier{
-  //TODO haig de mirar com fer arribar el context a la classe Movie
 
   final String _apiKey = '1a474fe8ab2a382b7c5579057212b3ab';
   final String _baseUrl = 'api.themoviedb.org';
@@ -120,7 +119,10 @@ class MoviesProvider extends ChangeNotifier{
 
     //print('Demanant info actors!');
     final jsonData = await _getJson('3/movie/$id/credits');
-    final castResponse = CastResponse.fromRawJson(jsonData);
+    CastResponse castResponse = CastResponse.fromRawJson(jsonData);
+
+    //Filtrage: vull evitar que al cast slider surtin casts sense info 
+    castResponse.filterCastList();
 
     moviesCast[id] = castResponse.cast;
     moviesCrew[id] = castResponse.crew;
@@ -133,7 +135,6 @@ class MoviesProvider extends ChangeNotifier{
     //manetenim la pelicula en memoria pq no vagi fent la mateixa peticio http una vegada rere l'altre
     if (moviesCrew.containsKey(id)) return moviesCrew[id]!;
 
-    //print('Demanant info actors!');
     final jsonData = await _getJson('3/movie/$id/credits');
     final crewResponse = CastResponse.fromRawJson(jsonData);
 
@@ -165,7 +166,10 @@ class MoviesProvider extends ChangeNotifier{
     
     //Peticio de les pelicules en les que ha treballat
     final jsonD = await _getJson('3/person/$castId/combined_credits');
-    final CastDetailResponse response = CastDetailResponse.fromRawJson(jsonD);
+    CastDetailResponse response = CastDetailResponse.fromRawJson(jsonD);
+    //Filtratge: treiem totes les pelis que no tinguin titol
+    response.filterCastList();
+    
     List<Movie> tmp = [];
     if (actorDetail.knownForDepartment == 'Directing') {
       tmp = response.crew;

@@ -58,7 +58,11 @@ class Movie {
   }
 
   get releaseYear {
-    return releaseDate != null ? releaseDate!.substring(0, 4) : null;
+    return (releaseDate != null && releaseDate!.isNotEmpty) ? releaseDate!.substring(0, 4) : null;
+  }
+
+  get getTitle {
+    return title ?? "No original title";
   }
 
   String getMovieGenres(BuildContext context) {
@@ -72,8 +76,6 @@ class Movie {
   }
 
   factory Movie.fromRawJson(String str) => Movie.fromJson(json.decode(str));
-
-  //TODO: HAIG DE MIRAR QUE CADA VEGADA QUE ES CREI UNA MOVIE JA NO EXISTEIXI A LA LLISTA DE GUARDADES
 
   factory Movie.fromJson(Map<String, dynamic> json) {
     //si true, la movie esta guardada a la llista, per tant necessitem retornar la instancia ja creada
