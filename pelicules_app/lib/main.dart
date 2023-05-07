@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pelicules_app/helpers/helpers.dart';
 import 'package:provider/provider.dart';
 
 import 'package:pelicules_app/providers/movies_provider.dart';
@@ -18,8 +19,8 @@ class AppState extends StatelessWidget {
       providers: [
         //Aqui estem fent servir el nostre provider => lazy: evita que es faci de forma lazy, es a dir si no li diem que false, nomes s'instanciaria
         //quan algun widget ho necessiti, nosaltres necessitem que quedi instanciada ben amunt del context, de l'abre de widgets
-        ChangeNotifierProvider(create: (context) => SavedMoviesProvider(context), lazy: false),
-        ChangeNotifierProvider(create: (context) => MoviesProvider(context), lazy: false),
+        ChangeNotifierProvider(create: (context) => SavedMoviesProvider(), lazy: false),
+        ChangeNotifierProvider(create: (context) => MoviesProvider(), lazy: false),
       ],
       child: const MyApp(),
     );
@@ -31,6 +32,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    AppContext.setContext(context);
     return MaterialApp(
       title: 'Material App',
       debugShowCheckedModeBanner: false,

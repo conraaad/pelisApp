@@ -12,7 +12,7 @@ import 'package:pelicules_app/models/models.dart';
 
 class MoviesProvider extends ChangeNotifier{
   //TODO haig de mirar com fer arribar el context a la classe Movie
-  BuildContext context;
+
   final String _apiKey = '1a474fe8ab2a382b7c5579057212b3ab';
   final String _baseUrl = 'api.themoviedb.org';
   final String _language = 'es-ES';
@@ -38,7 +38,7 @@ class MoviesProvider extends ChangeNotifier{
   final StreamController<List<Movie>> _suggestionStreamController = StreamController.broadcast();
   Stream<List<Movie>> get suggestionStream => _suggestionStreamController.stream;
 
-  MoviesProvider(this.context){
+  MoviesProvider(){
     getGenres();
     getNowPlayingMovies();
     getPopularMovies();

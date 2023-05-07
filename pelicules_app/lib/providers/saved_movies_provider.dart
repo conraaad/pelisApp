@@ -7,12 +7,11 @@ import 'package:pelicules_app/models/models.dart';
 
 class SavedMoviesProvider extends ChangeNotifier {
   
-  BuildContext context;
   final LocalStorage _storage = LocalStorage('saved_movies.json');
   bool empty = true;
   List<Movie> savedMoviesList = [];
   
-  SavedMoviesProvider(this.context){
+  SavedMoviesProvider(){
     //For debugging
     //clearStorage();
     _loadFromStorage();

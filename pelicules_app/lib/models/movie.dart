@@ -2,10 +2,10 @@
 
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:pelicules_app/providers/saved_movies_provider.dart';
 import 'package:provider/provider.dart';
 
 import 'package:pelicules_app/helpers/helpers.dart';
+import 'package:pelicules_app/providers/saved_movies_provider.dart';
 import 'package:pelicules_app/providers/movies_provider.dart';
 
 class Movie {
@@ -34,12 +34,12 @@ class Movie {
     required this.genreIds,
     required this.id,
     required this.originalLanguage,
-    this.originalTitle, //Abans no estava aixi
+    this.originalTitle,
     required this.overview,
     required this.popularity,
     this.posterPath,
     this.releaseDate,
-    this.title,  //Abans no estava aixi
+    this.title, 
     this.video,
     required this.voteAverage,
     required this.voteCount,
@@ -76,24 +76,30 @@ class Movie {
   //TODO: HAIG DE MIRAR QUE CADA VEGADA QUE ES CREI UNA MOVIE JA NO EXISTEIXI A LA LLISTA DE GUARDADES
 
   factory Movie.fromJson(Map<String, dynamic> json) {
-    _isMovieSaved(json);
-    return Movie(
-      adult: json["adult"],
-      backdropPath: json["backdrop_path"],
-      genreIds: List<int>.from(json["genre_ids"].map((x) => x)),
-      id: json["id"],
-      originalLanguage: json["original_language"],
-      originalTitle: json["original_title"],
-      overview: json["overview"],
-      popularity: json["popularity"]?.toDouble(),
-      posterPath: json["poster_path"],
-      releaseDate: json["release_date"],
-      title: json["title"],
-      video: json["video"],
-      voteAverage: json["vote_average"]?.toDouble(),
-      voteCount: json["vote_count"],
-      saved: json["saved"] ?? false
-    );
+    //si true, la movie esta guardada a la llista, per tant necessitem retornar la instancia ja creada
+    final p = Movie.isMovieSaved(AppContext.getContext(), json);
+    if (p.first) {
+      return p.second!;
+    } 
+    else {
+      return Movie(
+        adult: json["adult"],
+        backdropPath: json["backdrop_path"],
+        genreIds: List<int>.from(json["genre_ids"].map((x) => x)),
+        id: json["id"],
+        originalLanguage: json["original_language"],
+        originalTitle: json["original_title"],
+        overview: json["overview"],
+        popularity: json["popularity"]?.toDouble(),
+        posterPath: json["poster_path"],
+        releaseDate: json["release_date"],
+        title: json["title"],
+        video: json["video"],
+        voteAverage: json["vote_average"]?.toDouble(),
+        voteCount: json["vote_count"],
+        saved: json["saved"] ?? false
+      );
+    }
   }
 
   //JSON encodable per fer internal storage
@@ -115,8 +121,12 @@ class Movie {
     "saved": saved
   };
 
-  static Pair<bool, Movie?> _isMovieSaved(Map<String, dynamic> json) {
-    //final savedMoviesProvider = Provider.of<SavedMoviesProvider>(context);
-    return Pair(true, null); 
+  //Busca una Movie amb id en el json que estigui guardada
+  static Pair<bool, Movie?> isMovieSaved(BuildContext context, Map<String, dynamic> json) {
+    final savedMoviesProvider = Provider.of<SavedMoviesProvider>(context, listen: false);
+    for (int i = 0; i < savedMoviesProvider.savedMoviesList.length; i++) {
+      if (savedMoviesProvider.savedMoviesList[i].id == json["id"]) return Pair(true, savedMoviesProvider.savedMoviesList[i]);
+    }
+    return Pair(false, null);
   }
 }
