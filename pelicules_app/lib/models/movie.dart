@@ -2,8 +2,10 @@
 
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:pelicules_app/providers/saved_movies_provider.dart';
 import 'package:provider/provider.dart';
 
+import 'package:pelicules_app/helpers/helpers.dart';
 import 'package:pelicules_app/providers/movies_provider.dart';
 
 class Movie {
@@ -24,6 +26,7 @@ class Movie {
   int voteCount;
 
   String? heroId;
+  bool saved;
 
   Movie({
     required this.adult,
@@ -40,6 +43,7 @@ class Movie {
     this.video,
     required this.voteAverage,
     required this.voteCount,
+    this.saved = false,
   });
 
 
@@ -69,20 +73,50 @@ class Movie {
 
   factory Movie.fromRawJson(String str) => Movie.fromJson(json.decode(str));
 
-  factory Movie.fromJson(Map<String, dynamic> json) => Movie(
-    adult: json["adult"],
-    backdropPath: json["backdrop_path"],
-    genreIds: List<int>.from(json["genre_ids"].map((x) => x)),
-    id: json["id"],
-    originalLanguage: json["original_language"],
-    originalTitle: json["original_title"],
-    overview: json["overview"],
-    popularity: json["popularity"]?.toDouble(),
-    posterPath: json["poster_path"],
-    releaseDate: json["release_date"],
-    title: json["title"],
-    video: json["video"],
-    voteAverage: json["vote_average"]?.toDouble(),
-    voteCount: json["vote_count"],
-  );
+  //TODO: HAIG DE MIRAR QUE CADA VEGADA QUE ES CREI UNA MOVIE JA NO EXISTEIXI A LA LLISTA DE GUARDADES
+
+  factory Movie.fromJson(Map<String, dynamic> json) {
+    _isMovieSaved(json);
+    return Movie(
+      adult: json["adult"],
+      backdropPath: json["backdrop_path"],
+      genreIds: List<int>.from(json["genre_ids"].map((x) => x)),
+      id: json["id"],
+      originalLanguage: json["original_language"],
+      originalTitle: json["original_title"],
+      overview: json["overview"],
+      popularity: json["popularity"]?.toDouble(),
+      posterPath: json["poster_path"],
+      releaseDate: json["release_date"],
+      title: json["title"],
+      video: json["video"],
+      voteAverage: json["vote_average"]?.toDouble(),
+      voteCount: json["vote_count"],
+      saved: json["saved"] ?? false
+    );
+  }
+
+  //JSON encodable per fer internal storage
+  Map<String, dynamic> toJsonEncodable() => {
+    "adult": adult,
+    "backdrop_path": backdropPath,
+    "genre_ids": List<dynamic>.from(genreIds.map((x) => x)),
+    "id": id,
+    "original_language": originalLanguage,
+    "original_title": originalTitle,
+    "overview": overview,
+    "popularity": popularity,
+    "poster_path": posterPath,
+    "release_date": releaseDate,
+    "title": title,
+    "video": video,
+    "vote_average": voteAverage,
+    "vote_count": voteCount,
+    "saved": saved
+  };
+
+  static Pair<bool, Movie?> _isMovieSaved(Map<String, dynamic> json) {
+    //final savedMoviesProvider = Provider.of<SavedMoviesProvider>(context);
+    return Pair(true, null); 
+  }
 }

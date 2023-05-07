@@ -5,13 +5,14 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-import 'package:pelicules_app/helpers/debouncer.dart';
+import 'package:pelicules_app/helpers/helpers.dart';
 import 'package:pelicules_app/models/models.dart';
 
 //Aquest sera el nostre provider, pq sigui un provider ha de heredar de ChangeNotifier que serveix per compartir info
 
 class MoviesProvider extends ChangeNotifier{
-
+  //TODO haig de mirar com fer arribar el context a la classe Movie
+  BuildContext context;
   final String _apiKey = '1a474fe8ab2a382b7c5579057212b3ab';
   final String _baseUrl = 'api.themoviedb.org';
   final String _language = 'es-ES';
@@ -37,7 +38,7 @@ class MoviesProvider extends ChangeNotifier{
   final StreamController<List<Movie>> _suggestionStreamController = StreamController.broadcast();
   Stream<List<Movie>> get suggestionStream => _suggestionStreamController.stream;
 
-  MoviesProvider(){
+  MoviesProvider(this.context){
     getGenres();
     getNowPlayingMovies();
     getPopularMovies();

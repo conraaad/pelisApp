@@ -237,7 +237,9 @@ class _MoviePoster extends StatelessWidget {
         children: [
           //ClipRRect es similar a una targeta
           GestureDetector(
-            onTap: () => Navigator.pushNamed(context, 'detail', arguments: movie),
+            onTap: () {
+              movie.title != null ? Navigator.pushNamed(context, 'detail', arguments: movie) : null;
+            },
             child: Hero(
               tag: movie.heroId!,
               child: ClipRRect(

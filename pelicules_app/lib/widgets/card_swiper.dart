@@ -24,7 +24,7 @@ class CardSwiper extends StatelessWidget {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             alignment: Alignment.centerLeft,
-            child: const Text('Ara en cinemes', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            child: const Text('Ara en cinemes', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white)),
           ),
           
           Swiper(

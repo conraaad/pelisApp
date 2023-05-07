@@ -1,20 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'package:pelicules_app/models/models.dart';
 import 'package:pelicules_app/providers/movies_provider.dart';
+import 'package:pelicules_app/providers/saved_movies_provider.dart';
+
+import 'package:pelicules_app/models/models.dart';
 import 'package:pelicules_app/themes/app_theme.dart';
 import 'package:pelicules_app/widgets/widgets.dart';
 
-class DetailScreen extends StatelessWidget {
+class DetailScreen extends StatefulWidget {
    
   const DetailScreen({Key? key}) : super(key: key);
-  
+
+  @override
+  State<DetailScreen> createState() => _DetailScreenState();
+}
+
+class _DetailScreenState extends State<DetailScreen> {
   @override
   Widget build(BuildContext context) {
 
     //manera de rebre els arguments que s'envien mitjançant els args del navigator
     final Movie movie = ModalRoute.of(context)?.settings.arguments as Movie;
+
+    int favoriteOption;
+    movie.saved ? favoriteOption = 1 : favoriteOption = 0;
+    const List<Icon> favoriteIcons = [Icon(Icons.favorite_border_rounded, size: 30), Icon(Icons.favorite_rounded, color: Colors.red, size: 30)];
     
     return Scaffold(
       body: CustomScrollView(
@@ -36,6 +47,24 @@ class DetailScreen extends StatelessWidget {
           )
         ],
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          setState(() {
+            final savedMoviesProvider = Provider.of<SavedMoviesProvider>(context, listen: false);
+            if (!movie.saved) {
+              movie.saved = true;
+              savedMoviesProvider.addMovie(movie);
+            }
+            else {
+              movie.saved = false;
+              savedMoviesProvider.delMovie(movie);
+            }
+            favoriteOption = 1 - favoriteOption;
+          });
+        },
+        child: favoriteIcons[favoriteOption]
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
     );
   }
 }

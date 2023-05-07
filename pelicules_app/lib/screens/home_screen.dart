@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:pelicules_app/providers/movies_provider.dart';
+
 import 'package:pelicules_app/search/search_delegate.dart';
+import 'package:pelicules_app/themes/app_theme.dart';
 import 'package:pelicules_app/widgets/widgets.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -28,34 +30,41 @@ class HomeScreen extends StatelessWidget {
         ],
       ),
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            //Scroll lateral de cartes  
-            CardSwiper(movieList: moviesProvider.onDisplayMovies),
-
-            const SizedBox(height: 20),
-
-            MovieSlider(
-              movieList: moviesProvider.topRatedMovies, 
-              sliderTitle: 'Les més valorades',
-              onNextPage: moviesProvider.getTopRatedMovies,          //aqui estem enviant la funcio del provider, de manera que des del widget es pugui fer una peticio http
-            ),
-
-            //Scroll lateral de pelis
-            MovieSlider(
-              movieList: moviesProvider.popularMovies, 
-              sliderTitle: 'Populars',
-              onNextPage: moviesProvider.getPopularMovies,          //aqui estem enviant la funcio del provider, de manera que des del widget es pugui fer una peticio http
-            ),
-            const SizedBox(height: 50,),
-          ],
+        //Si es volgués treure el gradient es aquest container
+        child: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [AppTheme.mainColor, Colors.white],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              stops: [0.3, 0.6]
+            )
+          ),
+          child: Column(
+            children: [
+              const SizedBox(height: 10),
+              //Scroll lateral de cartes  
+              CardSwiper(movieList: moviesProvider.onDisplayMovies),
+        
+              const SizedBox(height: 10),
+        
+              MovieSlider(
+                movieList: moviesProvider.topRatedMovies, 
+                sliderTitle: 'Les més valorades',
+                onNextPage: moviesProvider.getTopRatedMovies,          //aqui estem enviant la funcio del provider, de manera que des del widget es pugui fer una peticio http
+              ),
+        
+              //Scroll lateral de pelis
+              MovieSlider(
+                movieList: moviesProvider.popularMovies, 
+                sliderTitle: 'Populars',
+                onNextPage: moviesProvider.getPopularMovies,          //aqui estem enviant la funcio del provider, de manera que des del widget es pugui fer una peticio http
+              ),
+              const SizedBox(height: 50,),
+            ],
+          ),
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => Navigator.pushNamed(context, 'watchList'),
-        child: const Icon(Icons.movie_filter),
-      ),
-      //Aqui la idea es mirar de implementar una Bottom navigation bar
+      )
     );
   }
 }
